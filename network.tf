@@ -1,20 +1,3 @@
-# --------------------instances
-
-# resource "aws_instance" "public-ec2" {
-#   ami = "ami-0a0e5d9c7acc336f1"
-#   instance_type = "t2.micro"
-#   tags = {
-#     Name = "public-ec2"
-#   }
-# }
-
-# resource "aws_instance" "private-ec2" {
-#   ami = "ami-0a0e5d9c7acc336f1"
-#   instance_type = "t2.micro"
-#   tags = {
-#     Name = "private-ec2"
-#   }
-# }
 
 # --------------------VPC
 
