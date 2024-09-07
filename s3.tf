@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "terraform_state" {
 
 
 resource "aws_s3_bucket_versioning" "versioning" {
-    
+
   bucket = aws_s3_bucket.terraform_state.id
   versioning_configuration {
     status = "Enabled"
@@ -29,13 +29,3 @@ resource "aws_dynamodb_table" "terraform-lock-state" {
 }
 
 
-
-# terraform {
-#   backend "s3" {
-#     bucket         = "terraform-lab-bucket-sstate"
-#     key            = "dev/terraform.tfstate"
-#     region         = "us-east-1"
-#     dynamodb_table = "terraform-lock-state"
-#     encrypt        = true
-#   }
-# }
