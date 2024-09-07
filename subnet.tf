@@ -1,17 +1,10 @@
-resource "aws_subnet" "public-subnet" {
+resource "aws_subnet" "subnets" {
+  for_each          = var.subnet_data
   vpc_id            = aws_vpc.terraform-lab-vpc.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
+  cidr_block        = each.value.cidr_block
+  availability_zone = each.value.availability_zone
   tags = {
-    Name = "public-subnet"
+    Name = each.key
   }
 }
 
-resource "aws_subnet" "private-subnet" {
-  vpc_id            = aws_vpc.terraform-lab-vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1a"
-  tags = {
-    Name = "private-subnet"
-  }
-}

@@ -1,23 +1,22 @@
-resource "aws_instance" "public-ec2" {
-  ami                         = var.instance-ami
-  instance_type               = "t2.micro"
-  subnet_id                   = aws_subnet.public-subnet.id
-  vpc_security_group_ids      = [aws_security_group.allow-ssh.id]
-  associate_public_ip_address = true
-  key_name                    = aws_key_pair.kp.key_name
-  tags = {
-    Name = "public-ec2"
-  }
-}
+resource "aws_instance" "ec2" {
+  for_each = var.instance_data
 
-# -------private----------
-resource "aws_instance" "private-ec2" {
-  ami                    = var.instance-ami
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private-subnet.id
-  vpc_security_group_ids = [aws_security_group.allow-ssh.id]
-  key_name               = aws_key_pair.kp.key_name
+  ami                         = each.value.ami
+  instance_type               = each.value.instance_type
+  subnet_id                   = aws_subnet.subnets[each.value.subnet_key].id
+  vpc_security_group_ids      = [aws_security_group.allow-ssh.id]
+  associate_public_ip_address = each.value.associate_public_ip_address
+
+  key_name = aws_key_pair.kp.key_name
+
+  depends_on = [aws_key_pair.kp , aws_security_group.allow-ssh]
   tags = {
-    Name = "private-ec2"
+    Name = each.key
   }
+
+ 
+  # provisioner "local-exec" {
+   
+  #   command = each.key == "public" ? "sudo scp -i ~/.ssh/terraform-lab.pem ~/.ssh/terraform-lab.pem  ubuntu@${self.public_ip}:/home/ubuntu/.ssh/terraform-lab.pem" : "echo private instance"
+  # }
 }
